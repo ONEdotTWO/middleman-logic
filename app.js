@@ -1,7 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
-var routes = require('./routes/index');
 var logic = require('./routes/logic');
 
 var app = express();
@@ -12,8 +11,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/', routes);
-app.use('/logic', sender);
+app.use('/', logic);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
