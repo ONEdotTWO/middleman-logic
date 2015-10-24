@@ -1,7 +1,3 @@
 {
-  "API_KEY" : "9b025092e8acbe68f4d5d91eb25b768fb9f6703e",
-  "API_KEY2" : "07fb0293f40bf29c9cb970e41682df46e5709992",
-  "MONGO_URI" : "mongodb://onedottwo:maIts5yUb5Thac@ds031531.mongolab.com:31531/middleman",
-  "MONGO_API_KEY" : "8vQvECjRR7qHZ_s640MP0sy9W_-Vk4wn",
-  "MIDDLEMAN_NUMBER" : "447860033664"
+    "mode":"middleman"
 }
