@@ -22,7 +22,7 @@ router.post('/', function (req, res) {
         // If message contains # at start then take first token as 'to' number
         if(content.substr(0,1) == "#")
         {
-            var send_to = content.substr(1,11);
+            var send_to = content.substr(1,12);
             var from = configuration.middleman_number;
             var message = content.substr(13);
 
@@ -42,7 +42,7 @@ router.post('/', function (req, res) {
                 }
             });
         }
-        res.json("{}");
+        res.json({});
     }
 });
 
