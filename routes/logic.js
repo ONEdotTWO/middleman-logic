@@ -7,6 +7,8 @@ var http = require('http');
 /* GET home page. */
 router.post('/', function (req, res) {
 
+    console.log('  got body => ' + req.body);
+
     // Load configuration
     var configuration = JSON.parse(
         fs.readFileSync("bin/config.json")
