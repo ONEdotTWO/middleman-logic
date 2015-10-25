@@ -6,12 +6,17 @@ var senderUrlBase = "http://" + config.hostname + ":" + config.senderPort + "/se
 var exports = {
   send: function (msg, callback) {
     request.get(senderUrlBase + "?to=" + msg.to + "&from=" + msg.from + "&content=" + msg.content,
-        function (err) {
-          callback(err);
+        function (err, resp) {
+          if (resp.statusCode != 200) {
+            callback(Error("SMS sender returned response status: " + resp.statusCode
+                + ": " + JSON.stringify(resp.body)));
+          } else {
+            callback();
+          }
         }
     );
   }
 };
 
 module.exports = exports;
-module.exports.senderUrlBase = senderUrlBase;
+module.exports.senderUrlBase = senderUrlBase; // does this do anything?
