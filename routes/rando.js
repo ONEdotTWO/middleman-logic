@@ -36,20 +36,24 @@ router.post('/start', function (req, res) {
 });
 
 router.get('/receive-sms', function (req, res) {
-  var msg = JSON.stringify({
-    'from': req.query.from,
-    'content': req.query.content
-  });
+  var msg = {
+    from: req.query.from,
+    content: req.query.content
+  };
 
   var query = { members : { $elemMatch : { number : msg.from } } };
 
   // find rando document for the 'from' number
-  mongo.findOne(collectionName, query, function (err, doc) {
-    if (!err) {
+  mongo.findOne(collectionName, query, function (err, doc, db) {
+    if (!err && doc) {
       // pick a random 'to' number
-      var otherMembers = doc.members.splice(doc.members.indexOf(msg.from));
-      msg.to = otherMembers[randomInt(otherMembers.length)].number;
 
+      var filtered = doc.members.filter(function (member) {
+        return member.number !== msg.from;
+      });
+
+      msg.to = filtered[randomInt(filtered.length)].number;
+      db.close();
       // everything's ok, send sms
       sms.send(msg, function (err) {
         if (!err) {
@@ -67,8 +71,10 @@ router.get('/receive-sms', function (req, res) {
           res.status(500).send(err.message);
         }
       })
-
-
+    } else if (!doc) {
+      res.status(500).send("don't know what to do with message: " + msg);
+    } else {
+      res.status(500).send(err.message);
     }
   })
 });

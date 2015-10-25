@@ -6,8 +6,12 @@ var exports = {
   save: function (collection, obj, callback) {
     mongoClient.connect(config.mongoUri, function (err, db) {
       if (!err) {
-        db.collection(collection).insertOne(obj, callback);
+        db.collection(collection).insertOne(obj, function (err) {
+          db.close();
+          callback(err)
+        });
       } else {
+        db.close();
         callback(err);
       }
     });
@@ -15,11 +19,11 @@ var exports = {
   findOne: function (collection, query, callback) {
     mongoClient.connect(config.mongoUri, function (err, db) {
       if (!err) {
-        db.collection(collection).find(query).limit(1).toArray(function (err, doc) {
-          db.close();
-          callback(err, doc);
+        db.collection(collection).find(query).toArray(function (err, doc) {
+          callback(err, doc[0], db);
         });
       } else {
+        db.close();
         callback(err);
       }
     });
@@ -28,7 +32,9 @@ var exports = {
     mongoClient.connect(config.mongoUri, function (err, db) {
       if (!err) {
         db.collection(collection).updateOne(filter, update, callback);
+        db.close();
       } else {
+        db.close();
         callback(err)
       }
     });
