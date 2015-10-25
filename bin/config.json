@@ -1,5 +1,15 @@
 {
+    "MONGO_URI":"mongodb://onedottwo:maIts5yUb5Thac@ds031531.mongolab.com:31531/middleman",
+    "middleman_number":"447860033664",
+
+    "mode":"random",
+    "users":[
+        "447749638453",
+        "447817933037",
+        "447534244964",
+        "447912546620"
+    ],
+
     "mode":"middleman",
-    "default_receiver":"447817933037",
-    "middleman_number":"447860033664"
+    "default_receiver":"447817933037"
 }
