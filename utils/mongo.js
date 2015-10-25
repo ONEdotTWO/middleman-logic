@@ -8,7 +8,7 @@ var exports = {
       if (!err) {
         db.collection(collection).insertOne(obj, callback);
       } else {
-        callback(Error("Couldn't connect to remote mongo: " + err.message));
+        callback(err);
       }
     });
   },
@@ -20,7 +20,16 @@ var exports = {
           callback(err, doc);
         });
       } else {
-        callback(Error("Couldn't connect to remote mongo: " + err.message));
+        callback(err);
+      }
+    });
+  },
+  updateOne: function (collection, filter, update, callback) {
+    mongoClient.connect(config.mongoUri, function (err, db) {
+      if (!err) {
+        db.collection(collection).updateOne(filter, update, callback);
+      } else {
+        callback(err)
       }
     });
   }

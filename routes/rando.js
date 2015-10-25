@@ -43,16 +43,34 @@ router.get('/receive-sms', function (req, res) {
 
   var query = { members : { $elemMatch : { number : msg.from } } };
 
-  // find rando ID for the 'from' number
+  // find rando document for the 'from' number
   mongo.findOne(collectionName, query, function (err, doc) {
     if (!err) {
+      // pick a random 'to' number
+      var otherMembers = doc.members.splice(doc.members.indexOf(msg.from));
+      msg.to = otherMembers[randomInt(otherMembers.length)].number;
+
+      // everything's ok, send sms
+      sms.send(msg, function (err) {
+        if (!err) {
+          // add msg to 'messages' array in mongo
+          var update = { $push : { messages : msg } };
+
+          mongo.updateOne(collectionName, doc, update, function (err) {
+            if (!err) {
+              res.send('msg handled')
+            } else {
+              res.status(500).send(err.message);
+            }
+          })
+        } else {
+          res.status(500).send(err.message);
+        }
+      })
+
 
     }
   })
-  // pick random number from members
-  // forward message to number
-  // add 'to' to msg
-  // write to database
 });
 
 function randomInt (max) {
