@@ -85,7 +85,7 @@ router.post('/send-edit', function (req, res) {
   };
 
   // get latest message
-  var filter = {pending: true, messages: {$elemMatch: {to: msg.to, from: msg.from}}};
+  var filter = { messages: {$elemMatch: {pending: true, to: msg.to, from: msg.from}}};
   var update = {$set: {"messages.$.pending": false, "messages.$.content": msg.content}};
   mongo.updateOne(collectionName, filter, update, function (err, result, db) {
     db.close();
