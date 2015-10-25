@@ -75,7 +75,6 @@ router.get('/receive-sms', function (req, res) {
       })
     } else if (!doc) {
       db.close();
-      res.status(500).send("don't know what to do with message: " + msg);
     } else {
       res.status(500).send(err.message);
     }
