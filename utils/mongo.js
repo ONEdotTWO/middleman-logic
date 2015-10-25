@@ -29,8 +29,8 @@ var exports = {
   updateOne: function (collection, filter, update, callback) {
     mongoClient.connect(config.mongoUri, function (err, db) {
       if (!err) {
-        db.collection(collection).updateOne(filter, update, function (err) {
-          callback(err, db);
+        db.collection(collection).updateOne(filter, update, function (err, result) {
+          callback(err, result, db);
         });
       } else {
         console.log("unable to connect to db for updating");

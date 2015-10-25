@@ -7,6 +7,7 @@ var exports = {
   send: function (msg, callback) {
     request.get(senderUrlBase + "?to=" + msg.to + "&from=" + msg.from + "&content=" + msg.content,
         function (err, resp) {
+
           if (resp.statusCode != 200) {
             callback(Error("SMS sender returned response status: " + resp.statusCode
                 + ": " + JSON.stringify(resp.body)));
