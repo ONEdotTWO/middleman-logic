@@ -11,7 +11,6 @@ var exports = {
           callback(err)
         });
       } else {
-        db.close();
         callback(err);
       }
     });
@@ -23,7 +22,6 @@ var exports = {
           callback(err, doc[0], db);
         });
       } else {
-        db.close();
         callback(err);
       }
     });
@@ -31,10 +29,11 @@ var exports = {
   updateOne: function (collection, filter, update, callback) {
     mongoClient.connect(config.mongoUri, function (err, db) {
       if (!err) {
-        db.collection(collection).updateOne(filter, update, callback);
-        db.close();
+        db.collection(collection).updateOne(filter, update, function (err) {
+          callback(err, db);
+        });
       } else {
-        db.close();
+        console.log("unable to connect to db for updating");
         callback(err)
       }
     });

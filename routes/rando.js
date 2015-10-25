@@ -52,15 +52,17 @@ router.get('/receive-sms', function (req, res) {
         return member.number !== msg.from;
       });
 
-      msg.to = filtered[randomInt(filtered.length)].number;
       db.close();
+      msg.to = filtered[randomInt(filtered.length)].number;
+
       // everything's ok, send sms
       sms.send(msg, function (err) {
         if (!err) {
           // add msg to 'messages' array in mongo
           var update = { $push : { messages : msg } };
 
-          mongo.updateOne(collectionName, doc, update, function (err) {
+          mongo.updateOne(collectionName, doc, update, function (err, db) {
+            db.close();
             if (!err) {
               res.send('msg handled')
             } else {
@@ -72,6 +74,7 @@ router.get('/receive-sms', function (req, res) {
         }
       })
     } else if (!doc) {
+      db.close();
       res.status(500).send("don't know what to do with message: " + msg);
     } else {
       res.status(500).send(err.message);
